@@ -79,6 +79,17 @@ class QuestionController extends Controller
             'user_id' => 'nullable|integer',
             'category_id' => 'nullable|integer',
         ]);
+
+        /**Generate Slug for the title if given in the request */
+        if ($request->has('title') && $question->title != $request->title) {
+            $validatedData['slug'] = str_slug($request->title);
+
+            /**Check for uniqueness of the slug....If Not, Append a random unique id based on the microtime */
+            if (Question::where('slug', $validatedData['slug'])->first()) {
+                $validatedData['slug'] = $validatedData['slug'] . '-' . uniqid();
+            }
+        }
+
         /**Update the data's */
         $question->update($validatedData);
 
