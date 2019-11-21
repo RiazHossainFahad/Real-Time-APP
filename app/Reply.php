@@ -9,15 +9,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    public function user(){
+    protected $guarded = [];
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function question(){
+    public function question()
+    {
         return $this->belongsTo(Question::class);
     }
 
-    public function like(){
+    public function like()
+    {
         return $this->hasMany(Like::class);
     }
 }

@@ -63,7 +63,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validatedData = $request->validate([
-            'name' => 'nullable|string|max:255|unique:categories',
+            'name' => 'required|string|max:255|unique:categories',
         ]);
 
         /**Generate Slug for the name if given in the request */
