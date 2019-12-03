@@ -10,6 +10,17 @@ use Symfony\Component\HttpFoundation\Response;
 class LikeController extends Controller
 {
     /**
+     * Create a new LikeController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('jwt');
+    }
+
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -18,11 +29,8 @@ class LikeController extends Controller
     public function like(Reply $reply)
     {
         $reply->like()->create([
-            // 'user_id' => auth()->id(),
-            'user_id' => 1,
+            'user_id' => auth()->id(),
         ]);
-
-        // return response(['likes' => $reply->like()->get()], Response::HTTP_CREATED);
     }
 
     /**
@@ -33,8 +41,6 @@ class LikeController extends Controller
      */
     public function unlike(Reply $reply)
     {
-        // $reply->like()->where(['user_id' => auth()->id()])->first()->delete();
-        $reply->like()->where(['user_id' => 1])->first()->delete();
-        // return response(null, Response::HTTP_NO_CONTENT);
+        $reply->like()->where(['user_id' => auth()->id()])->first()->delete();
     }
 }
