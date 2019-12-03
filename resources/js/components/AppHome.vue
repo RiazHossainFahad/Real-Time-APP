@@ -1,26 +1,21 @@
 <template>
-  <v-container>
-  <v-alert type="success">
-      I'm a success alert.
-    </v-alert>
-
-    <v-alert type="info">
-      I'm an info alert.
-    </v-alert>
-
-    <v-alert type="warning">
-      I'm a warning alert.
-    </v-alert>
-
-    <v-alert type="error">
-      I'm an error alert.
-    </v-alert>
-  </v-container>
+  <div>
+      <toolbar></toolbar>
+      <h1>HOME</h1>
+      <app-footer></app-footer>
+  </div>
 </template>
 
 <script>
+import toolbar from './Toolbar'
+import appFooter from './AppFooter'
+
 export default {
     name: 'AppHome',
+    components: {
+        toolbar,
+        appFooter
+    }
 }
 </script>
 

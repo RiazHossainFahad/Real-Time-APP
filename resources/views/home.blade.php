@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
 
-    <title>Document</title>
+    <title>Real-Time Forum</title>
 </head>
 <body>
     <v-app id="app">
