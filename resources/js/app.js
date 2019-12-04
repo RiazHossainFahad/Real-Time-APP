@@ -14,7 +14,16 @@ Vue.use(Vuetify);
 
 Vue.component('AppHome', require('./components/AppHome.vue').default);
 
+import router from './Router/routes.js';
+import User from './Helpers/User';
+
+window.User = User;
+
+console.log(User.hasToken());
+// User.logout();
+
 const app = new Vue({
     el: '#app',
     vuetify: new Vuetify(),
+    router,
 });
