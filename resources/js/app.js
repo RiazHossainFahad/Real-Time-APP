@@ -19,7 +19,7 @@ import User from './Helpers/User';
 
 window.User = User;
 
-console.log(User.hasToken());
+console.log(User.id());
 // User.logout();
 
 const app = new Vue({

@@ -90842,30 +90842,45 @@ function () {
 
   _createClass(AppStorage, [{
     key: "setToken",
+
+    /**Store token in local storage */
     value: function setToken(token) {
       localStorage.setItem('token', token);
     }
+    /**Store username in local storage */
+
   }, {
     key: "setUser",
     value: function setUser(user) {
       localStorage.setItem('user', user);
     }
+    /**
+     * Call setToken and Username function to store data in
+     * local Storage
+     */
+
   }, {
     key: "storeInLocal",
     value: function storeInLocal(token, user) {
       this.setToken(token);
       this.setUser(user);
     }
+    /**Return token from local Storage */
+
   }, {
     key: "getToken",
     value: function getToken() {
       return localStorage.getItem('token');
     }
+    /**Return username from local storage */
+
   }, {
     key: "getUser",
     value: function getUser() {
       return localStorage.getItem('user');
     }
+    /**Remove token and username from local storage */
+
   }, {
     key: "ramoveFromLocal",
     value: function ramoveFromLocal() {
@@ -90905,22 +90920,35 @@ function () {
 
   _createClass(Token, [{
     key: "isvalid",
+
+    /**
+     * Check if the payload is valid or not 
+     * based on iss
+     * @returns Bool
+     * @param {Decoded payload} token 
+     */
     value: function isvalid(token) {
       var payload = this.payload(token);
 
       if (payload) {
-        console.log(payload);
         return payload.iss == "http://realtimeapp.test/api/auth/login" ? true : false;
       }
 
       return false;
     }
+    /**
+     * The JWT token has 3part. "Header, Payload, Signature"
+     * Split the token for decoding payload part.
+     */
+
   }, {
     key: "payload",
     value: function payload(token) {
       var payload = token.split('.')[1];
       return this.decode(payload);
     }
+    /**Decode the payload for ISS=>"Issued Srever" */
+
   }, {
     key: "decode",
     value: function decode(payload) {
@@ -90964,6 +90992,8 @@ function () {
 
   _createClass(User, [{
     key: "login",
+
+    /**Axios call to server for login */
     value: function login(data) {
       var _this = this;
 
@@ -90973,6 +91003,11 @@ function () {
         return console.log(err.response.data);
       });
     }
+    /**
+     * Call to store token and username if token is valid
+     * @param {response from axios} data 
+     */
+
   }, {
     key: "processAfterLoggedIn",
     value: function processAfterLoggedIn(data) {
@@ -90985,6 +91020,11 @@ function () {
         console.log('INVALID TOKEN');
       }
     }
+    /**
+     * Check if there is a token in localstorage
+     * @returns Bool
+     */
+
   }, {
     key: "hasToken",
     value: function hasToken() {
@@ -90996,15 +91036,38 @@ function () {
 
       return false;
     }
+    /**Checked if an user is loggedin or not */
+
   }, {
     key: "loggedIn",
     value: function loggedIn() {
       return this.hasToken();
     }
+    /**Clear localstorage when logged out*/
+
   }, {
     key: "logout",
     value: function logout() {
       _AppStorage__WEBPACK_IMPORTED_MODULE_1__["default"].ramoveFromLocal();
+    }
+  }, {
+    key: "name",
+    value: function name() {
+      if (this.loggedIn) {
+        return _AppStorage__WEBPACK_IMPORTED_MODULE_1__["default"].getUser();
+      }
+
+      return null;
+    }
+  }, {
+    key: "id",
+    value: function id() {
+      if (this.loggedIn) {
+        var tokenPayload = _Token__WEBPACK_IMPORTED_MODULE_0__["default"].payload(_AppStorage__WEBPACK_IMPORTED_MODULE_1__["default"].getToken());
+        return tokenPayload.sub;
+      }
+
+      return null;
     }
   }]);
 
@@ -91073,7 +91136,7 @@ Vue.component('AppHome', __webpack_require__(/*! ./components/AppHome.vue */ "./
 
 
 window.User = _Helpers_User__WEBPACK_IMPORTED_MODULE_2__["default"];
-console.log(_Helpers_User__WEBPACK_IMPORTED_MODULE_2__["default"].hasToken()); // User.logout();
+console.log(_Helpers_User__WEBPACK_IMPORTED_MODULE_2__["default"].id()); // User.logout();
 
 var app = new Vue({
   el: '#app',
