@@ -5,35 +5,46 @@
 
       <v-spacer></v-spacer>
 
-      <v-toolbar-items>
-        <v-btn text>Forum</v-btn>
-        <v-btn text>Ask Question</v-btn>
-        <v-btn text>Category</v-btn>
-        <v-btn text>
-          <router-link to="/login" class="router-link">
-            Login
+      <v-toolbar-items
+        v-for="item in items"
+        :key="item.title"
+      >
+        <v-btn 
+          text
+          v-if="item.show"
+        >
+          <router-link
+            :to="item.to"
+            class="router-link"
+          >
+            {{item.title}}
           </router-link>
         </v-btn>
       </v-toolbar-items>
 
-      <!-- <template v-if="$vuetify.breakpoint.smAndUp">
-        <v-btn icon>
-          <v-icon>mdi-export-variant</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-delete-circle</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-plus-circle</v-icon>
-        </v-btn>
-      </template> -->
     </v-toolbar>
   </div>
 </template>
 
 <script>
 export default {
-
+  data(){
+    return{
+      items: [
+        {title: 'Forum', to: '/forum', show: true},
+        {title: 'Ask Question', to: '/ask-question', show: User.loggedIn()},
+        {title: 'Category', to: '/category', show: User.loggedIn()},
+        {title: 'logout', to: '/logout', show: User.loggedIn()},
+        {title: 'Login', to: '/login', show: !User.loggedIn()},
+        {title: 'Signup', to: '/signup', show: !User.loggedIn()},
+      ]
+    }
+  },
+  created(){
+    EventBus.$on('logout', () => {
+      User.logout();
+    })
+  }
 }
 </script>
 

@@ -3,9 +3,24 @@ import AppStorage from './AppStorage';
 class User {
     /**Axios call to server for login */
     login(data){
-        axios.post('/api/auth/login', data)
-              .then(res => this.processAfterLoggedIn(res.data))
-              .catch(err => console.log(err.response.data))
+       return axios.post('/api/auth/login', data)
+              .then(res => {
+                  this.processAfterLoggedIn(res.data);
+                  return true
+                })
+              .catch(err => {return err.response.data})
+    }
+    
+    /**Axios call to server for signup */
+    signup(data){
+       return axios.post('/api/auth/signup', data)
+              .then(res => {
+                  this.processAfterLoggedIn(res.data);
+                  return true
+                })
+              .catch(err => {
+                    return err.response.data.errors
+                })
     }
 
     /**
@@ -42,6 +57,7 @@ class User {
     /**Clear localstorage when logged out*/
     logout(){
         AppStorage.ramoveFromLocal();
+        window.location = '/login';
     }
 
     name(){

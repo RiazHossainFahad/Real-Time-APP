@@ -19,8 +19,7 @@ import User from './Helpers/User';
 
 window.User = User;
 
-console.log(User.id());
-// User.logout();
+window.EventBus = new Vue();
 
 const app = new Vue({
     el: '#app',

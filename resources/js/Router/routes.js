@@ -1,12 +1,18 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import login from '../components/login/Login'
+import login from '../components/auth/Login'
+import logout from '../components/auth/Logout'
+import signup from '../components/auth/Signup'
+import forum from '../components/forum/Forum'
 
 Vue.use(VueRouter);
 
 const routes = [
-    { path: '/login', component: login },
+  { path: '/login', component: login, name: 'login'},
+  { path: '/logout', component: logout},
+  { path: '/signup', component: signup},
+  { path: '/forum', component: forum, name: 'forum'},
   ]
 
   const router = new VueRouter({

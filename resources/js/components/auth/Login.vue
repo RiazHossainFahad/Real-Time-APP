@@ -1,6 +1,13 @@
 <template>
 <v-container>
   <v-col cols="12" md="6" sm="8" xs="12">
+
+    <div v-if="getError == 'Unauthorized'">
+      <v-alert type="error">
+      These credentials does not match to our records.
+    </v-alert>
+    </div>
+
     <v-form
       ref="form"
       v-model="valid"
@@ -65,10 +72,20 @@
             show1: false,
             rules: {
                 required: value => !!value || 'Required.',
-              },
+            },
+            error: [],
         }
     },
-
+    computed: {
+      getError(){
+        return this.error;
+      }
+    },
+    created(){
+      if(User.loggedIn()){
+        this.$router.push({name: 'forum'});
+      }
+    },
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
@@ -77,9 +94,14 @@
       },
       reset () {
         this.$refs.form.reset()
+        this.error = [];
       },
       login(){
-        User.login(this.form);
+        User.login(this.form)
+          .then(res => {
+            res == true ? window.location = '/forum' : this.error = res.error;
+          })
+      //  console.log(this.error);
       }
     },
   }
