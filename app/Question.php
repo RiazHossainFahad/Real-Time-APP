@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\User;
-use App\Reply;
 use App\Category;
+use App\Reply;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
@@ -38,6 +38,6 @@ class Question extends Model
     /**Actual PATH for the question like domain/api/question/slug */
     public function getPathAttribute()
     {
-        return asset("api/question/$this->slug");
+        return "/question/$this->slug";
     }
 }

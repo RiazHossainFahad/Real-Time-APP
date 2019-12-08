@@ -42,7 +42,6 @@ class QuestionController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required',
-            'user_id' => 'required|integer',
             'category_id' => 'required|integer',
         ]);
 
@@ -55,7 +54,7 @@ class QuestionController extends Controller
         }
 
         /**Save the question and store it in $question */
-        $question = Question::create($validatedData);
+        $question = auth()->user()->question()->create($validatedData);
 
         /**Return response with question and status code 201*/
         return response(['question' => $question], Response::HTTP_CREATED);
