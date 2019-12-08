@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use Illuminate\Http\Request;
 use App\Http\Resources\CategoryResource;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
@@ -19,7 +19,6 @@ class CategoryController extends Controller
         $this->middleware('jwt', ['except' => ['index', 'show']]);
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +28,6 @@ class CategoryController extends Controller
     {
         return CategoryResource::collection(Category::get());
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -74,13 +72,13 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
+            'name' => 'required|string|max:255',
         ]);
 
-        /**Generate Slug for the name if given in the request */
-        if ($request->has('name') && $category->name != $request->name) {
-            $validatedData['slug'] = str_slug($request->title);
-        }
+        // /**Generate Slug for the name if given in the request */
+        // if ($request->has('name')) {
+        // }
+        $validatedData['slug'] = str_slug($request->name);
 
         /**Update the data*/
         $category->update($validatedData);

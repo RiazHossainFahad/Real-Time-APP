@@ -28,7 +28,7 @@
         </v-row>
       </v-list-item>
     </v-card-actions> -->
-    <v-card-text class="headline" v-html="body">
+    <v-card-text class="headline" v-html="question.body">
     </v-card-text>
 
   </v-card>
@@ -36,15 +36,10 @@
 
 <script>
 
-import md from 'marked';
-
 export default {
     name:'Question',
     props: ['question'],
     computed: {
-      body(){
-        return md.parse(this.question.body);
-      }
     },
 }
 </script>
