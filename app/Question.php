@@ -12,6 +12,9 @@ class Question extends Model
     /**For mass assignment */
     protected $guarded = [];
 
+    /**Eager loading reply */
+    protected $with = ['reply'];
+
     /**By default route @param is id
      * Now set to "slug"
      */
@@ -27,7 +30,7 @@ class Question extends Model
 
     public function reply()
     {
-        return $this->hasMany(Reply::class);
+        return $this->hasMany(Reply::class)->latest();
     }
 
     public function category()

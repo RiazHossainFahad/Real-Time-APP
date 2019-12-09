@@ -3,12 +3,20 @@
 namespace App;
 
 use App\Like;
-use App\User;
 use App\Question;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($reply) {
+            $reply->user_id = auth()->user()->id;
+        });
+    }
     protected $guarded = [];
 
     public function user()

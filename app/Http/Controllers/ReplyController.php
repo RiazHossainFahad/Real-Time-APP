@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Reply;
-use App\Question;
-use Illuminate\Http\Request;
 use App\Http\Resources\ReplyResource;
+use App\Question;
+use App\Reply;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ReplyController extends Controller
@@ -20,7 +20,6 @@ class ReplyController extends Controller
         $this->middleware('jwt', ['except' => ['index', 'show']]);
     }
 
-
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +29,6 @@ class ReplyController extends Controller
     {
         return ReplyResource::collection($question->reply);
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -42,7 +40,6 @@ class ReplyController extends Controller
     {
         $request->validate([
             'body' => 'required|max:255',
-            'question_id' => 'required|integer',
         ]);
 
         $reply = $question->reply()->create($request->all());

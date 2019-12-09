@@ -9,7 +9,7 @@
                 <span class="grey--text subtitle-1">{{question.user}} said {{question.created_at}}</span>
               </div>
               <v-spacer></v-spacer>
-              <v-btn color="success">10 Replies</v-btn>
+              <v-btn color="teal" dark>{{question.reply_count}} Replies</v-btn>
           </v-card-title>
 
         <v-card-text v-html="body">
