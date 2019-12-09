@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +35,7 @@ Route::apiResource('question/{question}/reply', 'ReplyController');
 
 Route::post('/like/{reply}', "LikeController@like");
 Route::delete('/like/{reply}', "LikeController@unlike");
+
+Route::post('/notifications', 'NotificationController@index');
+
+Route::post('/markAsRead', 'NotificationController@markAsRead');

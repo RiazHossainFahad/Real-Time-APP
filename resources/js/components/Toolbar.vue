@@ -5,6 +5,8 @@
 
       <v-spacer></v-spacer>
 
+      <app-notification v-if="login"></app-notification>
+
       <v-toolbar-items
         v-for="item in items"
         :key="item.title"
@@ -27,7 +29,10 @@
 </template>
 
 <script>
+import AppNotification from './AppNotification';
+
 export default {
+  components: {AppNotification},
   data(){
     return{
       items: [
@@ -38,6 +43,11 @@ export default {
         {title: 'Login', to: '/login', show: !User.loggedIn()},
         {title: 'Signup', to: '/signup', show: !User.loggedIn()},
       ]
+    }
+  },
+  computed: {
+    login(){
+      return User.loggedIn();
     }
   },
   created(){

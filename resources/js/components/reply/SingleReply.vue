@@ -19,6 +19,9 @@
                   </v-btn>
                 </v-card-actions>
               </div>
+
+              <v-spacer></v-spacer>
+              <like-reply :data="reply"></like-reply>
           </v-card-title>
           <v-divider></v-divider>
 
@@ -32,10 +35,11 @@
 <script>
 import md from 'marked';
 import EditReply from './EditReply';
+import LikeReply from '../likes/LikeReply';
 
 export default {
     props: ['reply', 'index'],
-    components: {EditReply},
+    components: {EditReply,LikeReply},
     data(){
       return {
         editing: false,

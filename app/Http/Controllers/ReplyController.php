@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ReplyResource;
+use App\Notifications\NewReplyNotification;
 use App\Question;
 use App\Reply;
 use Illuminate\Http\Request;
@@ -43,6 +44,11 @@ class ReplyController extends Controller
         ]);
 
         $reply = $question->reply()->create($request->all());
+
+        /**For Notification  */
+        $user = $question->user;
+        if ($user->id != auth()->user()->id)
+            $user->notify(new NewReplyNotification($reply));
 
         return response(['data' => new ReplyResource($reply)], Response::HTTP_CREATED);
     }

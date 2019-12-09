@@ -19,7 +19,6 @@ class LikeController extends Controller
         $this->middleware('jwt');
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -31,6 +30,7 @@ class LikeController extends Controller
         $reply->like()->create([
             'user_id' => auth()->id(),
         ]);
+        return response("liked", Response::HTTP_CREATED);
     }
 
     /**
@@ -41,6 +41,7 @@ class LikeController extends Controller
      */
     public function unlike(Reply $reply)
     {
-        $reply->like()->where(['user_id' => auth()->id()])->first()->delete();
+        $reply->like()->where('user_id', auth()->id())->first()->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
