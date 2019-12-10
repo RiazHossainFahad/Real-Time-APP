@@ -1,7 +1,11 @@
 <template>
   <div>
     <v-toolbar color="purple darken-3" dark>
-      <v-toolbar-title>Real-Time Forum</v-toolbar-title>
+      <v-toolbar-title>
+        <router-link to="/" class="router-link">
+          Real-Time Forum
+        </router-link>
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
