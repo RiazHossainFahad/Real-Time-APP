@@ -29,7 +29,7 @@ export default {
         axios.get('api/question')
             .then(res => this.questions = res.data.data)
             .catch(err => console.log(err));
-    }
+    },
 }
 </script>
 

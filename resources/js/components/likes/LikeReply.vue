@@ -20,6 +20,14 @@ export default {
             return this.liked ? "blue" : "blue lighten-3"
         }
     },
+    created(){
+        Echo.channel('LikeChannel')
+            .listen('LikeEvent', (e) => {
+                if(this.data.id == e.id){
+                    e.type == 1 ? this.count++ : this.count--;
+                }
+            });
+    },
     methods: {
         likeReply(){
             if(User.loggedIn){

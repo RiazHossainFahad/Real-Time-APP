@@ -22,6 +22,12 @@ export default {
     created(){
         this.listenNewReply();
         this.listenDeleteReply();
+        this.broadcastReply();
+
+        Echo.private('App.User.' + User.id())
+        .notification((notification) => {
+            // this.replies.unshift(notification.reply);
+        });
     },
     methods: {
         listenNewReply(){
@@ -34,6 +40,19 @@ export default {
                 axios.delete(`/api${this.QSlug}/reply/${this.replies[index].id}`)
                 .then(res => this.replies.splice(index, 1))
                 .catch(err => console.log(err.response.data));
+            });
+        },
+        broadcastReply(){
+            Echo.channel('ReplyChannel')
+            .listen('ReplyEvent', (e) => {
+                e.type == 1 ? this.replies.unshift(e.reply) : this.deleteReply(e.reply);
+            });
+        },
+        deleteReply(reply){
+            this.replies.forEach(element => {
+                if(element.id == reply.id){
+                    this.replies.splice(element, 1);
+                }
             });
         }
     }

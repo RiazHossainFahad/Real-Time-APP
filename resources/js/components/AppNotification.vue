@@ -9,17 +9,17 @@
             </template>
             <v-list>
             <v-list-item
-                v-for="(item, index) in unRead"
+                v-for="(item, index) in unReadNotifi"
                 :key="index"
             >
                 <router-link :to="item.data.path">
-                    <v-list-item-title color="blue" @click="readNotifi(item)">{{ item.data.reply_by }}<strong> Replied to</strong> {{ item.data.question }}</v-list-item-title>
+                    <v-list-item-title color="blue" @click="markAsReadNotifi(item)">{{ item.data.reply_by }}<strong> Replied to</strong> {{ item.data.question }}</v-list-item-title>
                 </router-link>
 
             </v-list-item>
 
             <v-list-item
-                v-for="item in read"
+                v-for="item in readNotifi"
                 :key="item.id"
             >
                 <router-link :to="item.data.path">
@@ -42,33 +42,51 @@ export default {
         }
     },
     created(){
-        if(User.loggedIn())
+        if(User.loggedIn()){
             this.getNotifications();
+
+            this.broadcastedNotifi();
+        }
     },
     computed:{
         color(){
             return this.unReadCount > 0 ? "red" : "blue"
+        },
+        unReadNotifi(){
+            if(this.unRead.length)
+                return this.unRead;
+        },
+        readNotifi(){
+            if(this.read.length)
+                return this.read;
         }
     },
     methods: {
         getNotifications(){
             axios.post('/api/notifications')
                 .then(res => {
-                    console.log(res);
                     this.read = res.data.read;
                     this.unRead = res.data.unRead;
                     this.unReadCount = res.data.unReadCount;
                 })
                 .catch(err => console.log(err));
         },
-        readNotifi(item){
-            axios.post('/api/markAsRead', {id: item.id})
+        markAsReadNotifi(item){
+            console.log(item);
+            axios.post('/api/markAsRead', {id: item.id || item.data.id})
                 .then(res => {
                     this.unRead.splice(item, 1);
                     this.unReadCount--;
                     this.read.push(item);
                 })
                 .catch(err => console.log(err));
+        },
+        broadcastedNotifi(){
+            Echo.private('App.User.' + User.id())
+            .notification((notification) => {
+                this.unRead.unshift({data: notification});
+                this.unReadCount++;
+            });
         }
     }
 }

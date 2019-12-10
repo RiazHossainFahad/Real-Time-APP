@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
 
     <title>Real-Time Forum</title>
+    <script>
+            // rename myToken as you like
+            window.myToken =  <?php echo json_encode(['csrfToken' => csrf_token(), ]); ?>
+    </script>
+    
 </head>
 <body>
     <v-app id="app">

@@ -102,6 +102,20 @@ import VueSimplemde from 'vue-simplemde'
             .then(res => {this.categories = res.data.data})
             .catch(err => console.log(err));
     },
+        mounted(){
+      
+        Echo.join(`chat`)
+        .here((users) => {
+          console.log(users);
+
+        })
+        .joining((user) => {
+            console.log(user.name);
+        })
+        .leaving((user) => {
+            console.log(user.name);
+        });
+    },
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
