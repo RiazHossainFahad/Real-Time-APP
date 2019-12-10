@@ -7,6 +7,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class NotificationController extends Controller
 {
+    /**
+     * Create a new LikeController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('jwt');
+    }
+
     public function index()
     {
         return [

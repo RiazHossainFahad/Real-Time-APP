@@ -69,7 +69,7 @@ export default {
                     this.unRead = res.data.unRead;
                     this.unReadCount = res.data.unReadCount;
                 })
-                .catch(err => console.log(err));
+                .catch(err => Exception.handle(err));
         },
         markAsReadNotifi(item){
             console.log(item);

@@ -32,28 +32,34 @@ export default {
     methods: {
         listenNewReply(){
             EventBus.$on('newReply', (reply)=>{
-                this.replies.unshift(reply);
+                this.addReply(reply);
             });
         },
         listenDeleteReply(){
-            EventBus.$on('deleteReply', (index)=>{
-                axios.delete(`/api${this.QSlug}/reply/${this.replies[index].id}`)
-                .then(res => this.replies.splice(index, 1))
+            EventBus.$on('deleteReply', (reply)=>{
+                axios.delete(`/api${this.QSlug}/reply/${reply.id}`)
+                .then(res => this.deleteReply(reply))
                 .catch(err => console.log(err.response.data));
             });
         },
         broadcastReply(){
             Echo.channel('ReplyChannel')
             .listen('ReplyEvent', (e) => {
-                e.type == 1 ? this.replies.unshift(e.reply) : this.deleteReply(e.reply);
+                e.type == 1 ? this.addReply(e.reply) : this.deleteReply(e.reply);
             });
         },
+        addReply(reply){
+            this.replies.unshift(reply);
+            EventBus.$emit('newReplyCount');
+        },
         deleteReply(reply){
-            this.replies.forEach(element => {
-                if(element.id == reply.id){
-                    this.replies.splice(element, 1);
+            for (let index = 0; index < this.replies.length; index++) {
+                if(this.replies[index].id == reply.id ){
+                    this.replies.splice(index, 1);
+                    EventBus.$emit('deleteReplyBroadcast');
                 }
-            });
+                
+            }
         }
     }
 

@@ -45,7 +45,10 @@ export default {
         return  false;
       }
     },
-
+    created(){
+      this.listenNewReply();
+      this.listenDeleteReply();
+    },
     methods: {
       destroy(){
         axios.delete(`/api/question/${this.$route.params.slug}`)
@@ -56,8 +59,18 @@ export default {
       },
       emitEditing(){
         EventBus.$emit('startEditing');
-      }
-    }
+      },
+      listenNewReply(){
+        EventBus.$on('newReplyCount', ()=>{
+            this.question.reply_count++;
+        });
+    },
+      listenDeleteReply(){
+        EventBus.$on('deleteReplyBroadcast', ()=>{
+            this.question.reply_count--;
+        });
+    },
+    },
 }
 </script>
 

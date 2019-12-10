@@ -62,7 +62,7 @@ export default {
     },
     methods: {
       deleteReply(){
-        EventBus.$emit('deleteReply', this.index);
+        EventBus.$emit('deleteReply', this.reply );
       },
       edit(){
         this.editing = true;

@@ -42,7 +42,7 @@ window.Echo = new Echo({
     key: "myKey",
     wsHost: window.location.hostname,
     wsPort: 6001,
-    disableStats: false,
+    disableStats: true,
     auth: {
         headers: {
             Authorization: access_token,

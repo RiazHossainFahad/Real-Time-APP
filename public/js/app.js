@@ -1962,7 +1962,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.unRead = res.data.unRead;
         _this.unReadCount = res.data.unReadCount;
       })["catch"](function (err) {
-        return console.log(err);
+        return Exception.handle(err);
       });
     },
     markAsReadNotifi: function markAsReadNotifi(item) {
@@ -2937,6 +2937,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2958,6 +2965,11 @@ __webpack_require__.r(__webpack_exports__);
     this.listenEmitEditing();
     this.listenCancelEditing();
     this.getQuestion();
+  },
+  computed: {
+    loggedIn: function loggedIn() {
+      return User.loggedIn();
+    }
   },
   methods: {
     listenEmitEditing: function listenEmitEditing() {
@@ -3044,6 +3056,10 @@ __webpack_require__.r(__webpack_exports__);
       return false;
     }
   },
+  created: function created() {
+    this.listenNewReply();
+    this.listenDeleteReply();
+  },
   methods: {
     destroy: function destroy() {
       var _this = this;
@@ -3056,6 +3072,20 @@ __webpack_require__.r(__webpack_exports__);
     },
     emitEditing: function emitEditing() {
       EventBus.$emit('startEditing');
+    },
+    listenNewReply: function listenNewReply() {
+      var _this2 = this;
+
+      EventBus.$on('newReplyCount', function () {
+        _this2.question.reply_count++;
+      });
+    },
+    listenDeleteReply: function listenDeleteReply() {
+      var _this3 = this;
+
+      EventBus.$on('deleteReplyBroadcast', function () {
+        _this3.question.reply_count--;
+      });
     }
   }
 });
@@ -3284,15 +3314,15 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       EventBus.$on('newReply', function (reply) {
-        _this.replies.unshift(reply);
+        _this.addReply(reply);
       });
     },
     listenDeleteReply: function listenDeleteReply() {
       var _this2 = this;
 
-      EventBus.$on('deleteReply', function (index) {
-        axios["delete"]("/api".concat(_this2.QSlug, "/reply/").concat(_this2.replies[index].id)).then(function (res) {
-          return _this2.replies.splice(index, 1);
+      EventBus.$on('deleteReply', function (reply) {
+        axios["delete"]("/api".concat(_this2.QSlug, "/reply/").concat(reply.id)).then(function (res) {
+          return _this2.deleteReply(reply);
         })["catch"](function (err) {
           return console.log(err.response.data);
         });
@@ -3302,17 +3332,20 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       Echo.channel('ReplyChannel').listen('ReplyEvent', function (e) {
-        e.type == 1 ? _this3.replies.unshift(e.reply) : _this3.deleteReply(e.reply);
+        e.type == 1 ? _this3.addReply(e.reply) : _this3.deleteReply(e.reply);
       });
     },
+    addReply: function addReply(reply) {
+      this.replies.unshift(reply);
+      EventBus.$emit('newReplyCount');
+    },
     deleteReply: function deleteReply(reply) {
-      var _this4 = this;
-
-      this.replies.forEach(function (element) {
-        if (element.id == reply.id) {
-          _this4.replies.splice(element, 1);
+      for (var index = 0; index < this.replies.length; index++) {
+        if (this.replies[index].id == reply.id) {
+          this.replies.splice(index, 1);
+          EventBus.$emit('deleteReplyBroadcast');
         }
-      });
+      }
     }
   }
 });
@@ -3397,7 +3430,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     deleteReply: function deleteReply() {
-      EventBus.$emit('deleteReply', this.index);
+      EventBus.$emit('deleteReply', this.reply);
     },
     edit: function edit() {
       this.editing = true;
@@ -67733,7 +67766,24 @@ var render = function() {
                 attrs: { replies: _vm.question.reply, QSlug: _vm.question.path }
               }),
               _vm._v(" "),
-              _c("create-reply", { attrs: { QSlug: _vm.question.path } })
+              _vm.loggedIn
+                ? _c("create-reply", { attrs: { QSlug: _vm.question.path } })
+                : _c(
+                    "v-container",
+                    { attrs: { "grid-list-md": "" } },
+                    [
+                      _c(
+                        "v-btn",
+                        [
+                          _c("router-link", { attrs: { to: "/login" } }, [
+                            _vm._v("\n          Login to reply\n          ")
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
             ],
             1
           )
@@ -120829,6 +120879,49 @@ function () {
 
 /***/ }),
 
+/***/ "./resources/js/Helpers/Exception.js":
+/*!*******************************************!*\
+  !*** ./resources/js/Helpers/Exception.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Exception =
+/*#__PURE__*/
+function () {
+  function Exception() {
+    _classCallCheck(this, Exception);
+  }
+
+  _createClass(Exception, [{
+    key: "handle",
+    value: function handle(error) {
+      this.isExpired(error.response.data.error);
+    }
+  }, {
+    key: "isExpired",
+    value: function isExpired(err) {
+      if (err == "Token is expired" || err == "Deleted token passed on request" || err == "Token is invalid" || err == "Access Token not found on request") {
+        User.logout();
+      }
+    }
+  }]);
+
+  return Exception;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Exception = new Exception());
+
+/***/ }),
+
 /***/ "./resources/js/Helpers/Token.js":
 /*!***************************************!*\
   !*** ./resources/js/Helpers/Token.js ***!
@@ -120877,15 +120970,34 @@ function () {
   }, {
     key: "payload",
     value: function payload(token) {
-      var payload = token.split('.')[1];
-      return this.decode(payload);
+      if (token != null) {
+        var payload = token.split('.')[1];
+        return this.decode(payload);
+      }
+
+      return false;
     }
     /**Decode the payload for ISS=>"Issued Srever" */
 
   }, {
     key: "decode",
     value: function decode(payload) {
-      return JSON.parse(atob(payload));
+      if (this.isBase64(payload)) {
+        return JSON.parse(atob(payload));
+      } else {
+        return false;
+      }
+    }
+    /**Security check if someone change the token or given by own */
+
+  }, {
+    key: "isBase64",
+    value: function isBase64(str) {
+      try {
+        return btoa(atob(str)).replace(/=/g, "") == str;
+      } catch (error) {
+        return false;
+      }
     }
   }]);
 
@@ -120980,8 +121092,8 @@ function () {
     value: function hasToken() {
       var storedToken = _AppStorage__WEBPACK_IMPORTED_MODULE_1__["default"].getToken();
 
-      if (storedToken) {
-        return _Token__WEBPACK_IMPORTED_MODULE_0__["default"].isvalid(storedToken);
+      if (storedToken != null) {
+        return _Token__WEBPACK_IMPORTED_MODULE_0__["default"].isvalid(storedToken) ? true : this.logout();
       }
 
       return false;
@@ -121106,6 +121218,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Router_routes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Router/routes.js */ "./resources/js/Router/routes.js");
 /* harmony import */ var _Helpers_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Helpers/User */ "./resources/js/Helpers/User.js");
+/* harmony import */ var _Helpers_Exception__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Helpers/Exception */ "./resources/js/Helpers/Exception.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -121119,7 +121232,9 @@ Vue.use(vuetify__WEBPACK_IMPORTED_MODULE_0___default.a);
 Vue.component('AppHome', __webpack_require__(/*! ./components/AppHome.vue */ "./resources/js/components/AppHome.vue")["default"]);
 
 
+
 window.User = _Helpers_User__WEBPACK_IMPORTED_MODULE_2__["default"];
+window.Exception = _Helpers_Exception__WEBPACK_IMPORTED_MODULE_3__["default"];
 window.EventBus = new Vue();
 var app = new Vue({
   el: '#app',
@@ -121176,7 +121291,7 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   key: "myKey",
   wsHost: window.location.hostname,
   wsPort: 6001,
-  disableStats: false,
+  disableStats: true,
   auth: {
     headers: {
       Authorization: access_token,

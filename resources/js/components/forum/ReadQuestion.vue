@@ -12,7 +12,14 @@
 
       <replies :replies = "question.reply" :QSlug = "question.path"></replies>
 
-      <create-reply :QSlug = "question.path"></create-reply>
+      <create-reply v-if="loggedIn" :QSlug = "question.path"></create-reply>
+      <v-container v-else grid-list-md>    
+        <v-btn>
+            <router-link to="/login">
+            Login to reply
+            </router-link>
+        </v-btn>
+      </v-container>
     </div>
   </div>
 </template>
@@ -36,6 +43,11 @@ export default {
         this.listenEmitEditing();
         this.listenCancelEditing();
         this.getQuestion();
+    },
+    computed:{
+        loggedIn(){
+            return User.loggedIn();
+        }
     },
     methods:{
         listenEmitEditing(){
