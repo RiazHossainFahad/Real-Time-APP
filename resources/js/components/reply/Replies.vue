@@ -13,7 +13,7 @@
 import Reply from './SingleReply'
 
 export default {
-    props: ['replies', 'QSlug'],
+    props: ['replies', 'QSlug', 'QId'],
     components: {Reply},
     data(){
         return{
@@ -49,8 +49,10 @@ export default {
             });
         },
         addReply(reply){
-            this.replies.unshift(reply);
-            EventBus.$emit('newReplyCount');
+            if (this.QId == reply.question_id) {
+                this.replies.unshift(reply);
+                EventBus.$emit('newReplyCount');   
+            }
         },
         deleteReply(reply){
             for (let index = 0; index < this.replies.length; index++) {

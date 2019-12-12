@@ -3336,7 +3336,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['replies', 'QSlug'],
+  props: ['replies', 'QSlug', 'QId'],
   components: {
     Reply: _SingleReply__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -3377,8 +3377,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     addReply: function addReply(reply) {
-      this.replies.unshift(reply);
-      EventBus.$emit('newReplyCount');
+      if (this.QId == reply.question_id) {
+        this.replies.unshift(reply);
+        EventBus.$emit('newReplyCount');
+      }
     },
     deleteReply: function deleteReply(reply) {
       for (var index = 0; index < this.replies.length; index++) {
@@ -67867,7 +67869,11 @@ var render = function() {
               _c("single-question", { attrs: { question: _vm.question } }),
               _vm._v(" "),
               _c("replies", {
-                attrs: { replies: _vm.question.reply, QSlug: _vm.question.path }
+                attrs: {
+                  replies: _vm.question.reply,
+                  QSlug: _vm.question.path,
+                  QId: _vm.question.id
+                }
               }),
               _vm._v(" "),
               _vm.loggedIn

@@ -10,7 +10,7 @@
         :question = "question"
       ></single-question>
 
-      <replies :replies = "question.reply" :QSlug = "question.path"></replies>
+      <replies :replies = "question.reply" :QSlug = "question.path" :QId="question.id"></replies>
 
       <create-reply v-if="loggedIn" :QSlug = "question.path"></create-reply>
       <v-container v-else grid-list-md>    
