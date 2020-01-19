@@ -96,18 +96,13 @@ For Production
 npm run prod
 ```
 
-### Assets folders are located at:
-
-For CSS Change:
+### TO run the program:
 
 ```
-resources/sass
+php artisan websockets:serve
 ```
 
-For JavaScript Change:
-
 ```
-resources/js
+php artisan serve
 ```
 
-> Single JavaScript files are located at individual blade files.

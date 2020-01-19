@@ -43,7 +43,7 @@ class ReplyController extends Controller
         $request->validate([
             'body' => 'required|max:255',
         ]);
-
+        $request['user_id'] = auth()->user()->id;
         $reply = $question->reply()->create($request->all());
 
         /**For Notification  */
