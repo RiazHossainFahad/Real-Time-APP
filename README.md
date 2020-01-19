@@ -1,78 +1,113 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+### Real-Time App
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+This project was developed with Laravel Framework 6.2. You should be familiar with the framework for better understanding and development.
 
-## About Laravel
+### Documentaion URLs
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+https://laravel.com/docs/6.x
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Development Server Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- `PHP` Version `^7.2`
+- `MySQL ^5.7` or `MariaDB ^10.2`
 
-## Learning Laravel
+### Installation Instructions
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+This project is dependent on the `composer` PHP package manager. Be sure the `composer` is available at your local development computer.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Resource: https://getcomposer.org/
 
-## Laravel Sponsors
+Step 01: Clone the repository to your local development computer (Clone with HTTPS):
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```
+git clone https://github.com/RiazHossainFahad/Real-Time-APP.git
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+Step 02: Install composer dependencies
 
-## Contributing
+Run at the command line
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+`composer install`
 
-## Code of Conduct
+For a check, if there are any package updates available:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+`composer update`
 
-## Security Vulnerabilities
+By running this command, the composer will install the required packages to your local development PC.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Step 03: Replace `.env` file information as per requirements
 
-## License
+`cp .env.example .env`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- URL of the Project
+- Database Information
+
+`php artisan key:generate`
+
+Step 04: If the composer installs all the required packages, the project is ready for the run.
+
+Step 05: Migrate the database files and seed the information
+
+The project is dependent on some `pre-exists database tables` and information. Therefore you need to `migrate` and` seed` first.
+
+Run at Command Prompt:
+
+`php artisan migrate --seed`
+
+If you need to have login access for the test, Please checkout the database or ADD USER
+
+### Node.js / Yarn Package Manager
+
+If want to update the assets, the project is dependent on Node.js or Yarn Package Manager. 
+
+Run at the command prompt at the root of the project:
+
+For NPM:
+```
+npm install
+```
+
+```
+npm update
+```
+
+For Yarn:
+```
+yarn install
+```
+
+```
+yarn update
+```
+
+#### After that
+
+To compile the assets
+
+For Development:
+
+```
+npm run dev
+```
+
+For Production
+
+```
+npm run prod
+```
+
+### Assets folders are located at:
+
+For CSS Change:
+
+```
+resources/sass
+```
+
+For JavaScript Change:
+
+```
+resources/js
+```
+
+> Single JavaScript files are located at individual blade files.
