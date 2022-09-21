@@ -30,6 +30,6 @@
         "pusher-js": "^5.0.3",
         "vue-router": "^3.1.5",
         "vue-simplemde": "^1.0.4",
-        "vuetify": "^2.2.4"
+        "vuetify": "^2.6.10"
     }
 }
